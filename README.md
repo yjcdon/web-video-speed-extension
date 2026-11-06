@@ -1,18 +1,26 @@
-# 视频长按加速倍率
+# 网页视频长按倍速
 
-适用于 Chrome、Edge 以及其他 Chromium 浏览器。
+为网页视频添加“按住右方向键倍速播放，松开恢复原速”的交互，适用于 Chrome、Edge 及其他 Chromium 浏览器。
 
-为普通网站中的 HTML 视频添加长按右方向键倍速播放，无需网站原本支持长按交互。使用 Manifest V3，无需构建或安装依赖。
+自动识别当前可见、正在播放的 HTML 视频，支持 B 站、抖音、YouTube 和其他普通网站，也支持获得键盘焦点的嵌入式播放器。网站无需原本提供长按倍速功能。
+
+长按阈值统一为 **0.5 秒**，倍率可在 **0.25×～16×** 之间调整，默认 **3×**。使用 Manifest V3，无需构建或安装依赖。
+
+[下载 v1.3.0 安装包](https://github.com/yjcdon/web-video-speed-extension/releases/download/v1.3.0/web-video-speed-extension-v1.3.0.zip) · [查看发布说明](https://github.com/yjcdon/web-video-speed-extension/releases/latest)
 
 ## 安装
 
-1. 从 [Releases](https://github.com/yjcdon/web-video-speed-extension/releases/latest) 下载对应版本的扩展 ZIP 并解压，或克隆本仓库。当前源码版本为 `1.3.0`，包含通用网站支持；安装发布包时请核对版本。
+1. 下载上方安装包并解压，或克隆本仓库。
 2. 在地址栏打开 `chrome://extensions`；Edge 请打开 `edge://extensions`。
 3. 开启页面右上角的“开发者模式”。
 4. 点击“加载已解压的扩展程序”，选择包含 `manifest.json` 的 `web-video-speed-extension` 文件夹。
 5. 允许扩展访问需要使用的网站，再刷新视频页面。通用识别需要浏览器授予相应网站的访问权限。
 
+更新已有扩展时，用新版文件替换原扩展目录内容，在扩展管理页点击“重新加载”，再刷新视频页面。
+
 ## 使用
+
+播放视频后，按住键盘右方向键 `→` 满 0.5 秒即可应用设定倍率，松开恢复原速。嵌入式播放器请先点击播放器区域，让它获得键盘焦点。
 
 - 点击浏览器工具栏中的扩展图标，即可通过滑块选择倍率。
 - 滑块范围为 `0.25×`～`16×`，每一格为 `0.25×`。
