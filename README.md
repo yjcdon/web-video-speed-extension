@@ -6,7 +6,7 @@
 
 长按阈值统一为 **0.5 秒**，倍率可在 **0.25×～16×** 之间调整，默认 **3×**。使用 Manifest V3，无需构建或安装依赖。
 
-[下载 v1.3.0 安装包](https://github.com/yjcdon/web-video-speed-extension/releases/download/v1.3.0/web-video-speed-extension-v1.3.0.zip) · [查看发布说明](https://github.com/yjcdon/web-video-speed-extension/releases/latest)
+[下载 v1.3.1 安装包](https://github.com/yjcdon/web-video-speed-extension/releases/download/v1.3.1/web-video-speed-extension-v1.3.1.zip) · [查看发布说明](https://github.com/yjcdon/web-video-speed-extension/releases/latest)
 
 ## 安装
 

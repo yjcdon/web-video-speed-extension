@@ -1,18 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 128 128">
-  <defs>
-    <linearGradient id="background" x1="16" y1="16" x2="112" y2="112" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#00AEEC"/>
-      <stop offset="0.52" stop-color="#6B77F8"/>
-      <stop offset="1" stop-color="#FE2C55"/>
-    </linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#151A38" flood-opacity="0.3"/>
-    </filter>
-  </defs>
-  <rect x="8" y="8" width="112" height="112" rx="30" fill="url(#background)"/>
-  <g fill="#fff" filter="url(#shadow)">
-    <path d="M31 38.5c0-4.1 4.6-6.5 7.9-4.1l35.4 25.5a5 5 0 0 1 0 8.2L38.9 93.6C35.6 96 31 93.6 31 89.5z"/>
-    <path d="M67 38.5c0-4.1 4.6-6.5 7.9-4.1l35.4 25.5a5 5 0 0 1 0 8.2L74.9 93.6C71.6 96 67 93.6 67 89.5z" opacity=".92"/>
-  </g>
-  <circle cx="102" cy="28" r="8" fill="#fff" opacity=".95"/>
-</svg>
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1793979218984" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9530" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M138.85 648.57c0 55.97 60.82 91.05 109.33 63.06l118.29-68.29 118.29-68.29 18.29-10.45V459.38l-18.29-10.45-118.29-68.29-118.29-68.29c-48.51-27.99-109.33 7.09-109.33 63.06v273.16z" fill="#A4D4FF" p-id="9531"></path><path d="M503.04 648.57c0 55.97 60.82 91.05 108.96 63.06l118.66-68.29 118.29-68.29c48.14-27.99 48.14-98.14 0-126.12l-118.29-68.29L612 312.35c-48.14-27.99-108.96 7.09-108.96 63.06v273.16z" fill="#2B8CF7" p-id="9532"></path></svg>

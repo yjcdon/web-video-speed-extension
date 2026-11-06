@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "视频长按加速倍率",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "为网页视频添加长按右方向键倍速播放，支持自定义倍率，松开恢复原速。",
   "icons": {
     "16": "icons/icon-16.png",
