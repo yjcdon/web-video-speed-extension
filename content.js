@@ -3,7 +3,8 @@
 
   const STORAGE_KEY = 'holdSpeed';
   const DEFAULT_SPEED = 3;
-  const HOLD_DELAY_MS = 420;
+  const HOLD_DELAY_MS = 500;
+  const IS_YOUTUBE = location.hostname === 'www.youtube.com' || location.hostname === 'youtube.com';
 
   let configuredSpeed = DEFAULT_SPEED;
   let isRightArrowHeld = false;
@@ -12,7 +13,6 @@
   let acceleratedVideo = null;
   let speedBeforeHold = 1;
   let enforceFrame = 0;
-  let toastTimer = 0;
 
   chrome.storage.sync.get({ [STORAGE_KEY]: DEFAULT_SPEED }, (result) => {
     configuredSpeed = normalizeSpeed(result[STORAGE_KEY]);
@@ -32,7 +32,7 @@
 
   function isEditableTarget(target) {
     if (!(target instanceof Element)) return false;
-    return Boolean(target.closest('input, textarea, select, [contenteditable="true"], [role="textbox"]'));
+    return target.isContentEditable || Boolean(target.closest('input, textarea, select, [role="textbox"]'));
   }
 
   function isVisible(video) {
@@ -41,8 +41,12 @@
     return rect.width > 0 && rect.height > 0 && style.display !== 'none' && style.visibility !== 'hidden';
   }
 
+  /** 选择当前可见的主视频，YouTube 仅在受支持的播放页面启用。 */
   function findPlayerVideo() {
-    const videos = [...document.querySelectorAll('video')].filter(isVisible);
+    // YouTube 首页也有预览视频，仅接管常规播放页、直播页和独立嵌入页的主播放器。
+    if (IS_YOUTUBE && !/^\/(watch$|live\/|embed\/)/.test(location.pathname)) return null;
+    const selector = IS_YOUTUBE ? '#movie_player video' : 'video';
+    const videos = [...document.querySelectorAll(selector)].filter(isVisible);
     if (!videos.length) return null;
 
     return videos.sort((a, b) => {
@@ -66,7 +70,6 @@
     acceleratedVideo = video;
     setPlaybackRate(video, configuredSpeed);
     enforceConfiguredSpeed();
-    showToast(`长按加速：${configuredSpeed.toFixed(2)}×`);
   }
 
   function enforceConfiguredSpeed() {
@@ -96,23 +99,51 @@
     }, 120);
   }
 
+  /** 开始识别无修饰键的右键长按；YouTube 同时接管首次按下和自动重复。 */
   function onKeyDown(event) {
+    if (event.code !== 'ArrowRight') return;
+    // 从第一次按下起拦截 YouTube 的跳秒，包括系统自动产生的重复按键。
+    if (IS_YOUTUBE && isRightArrowHeld) {
+      consumeKey(event);
+      return;
+    }
     if (
-      event.code !== 'ArrowRight' ||
       event.altKey || event.ctrlKey || event.metaKey || event.shiftKey ||
       isEditableTarget(event.target) || event.repeat || isRightArrowHeld
     ) return;
 
-    isRightArrowHeld = true;
     holdCandidateVideo = findPlayerVideo();
+    if (IS_YOUTUBE && !holdCandidateVideo) return;
+    if (IS_YOUTUBE) consumeKey(event);
+    isRightArrowHeld = true;
     if (holdCandidateVideo) speedBeforeHold = holdCandidateVideo.playbackRate;
     holdTimer = window.setTimeout(beginAcceleration, HOLD_DELAY_MS);
   }
 
+  /** 松开结束临时倍速，YouTube 未达到长按阈值时执行一次快进。 */
   function onKeyUp(event) {
     if (event.code !== 'ArrowRight' || !isRightArrowHeld) return;
+    if (IS_YOUTUBE) {
+      consumeKey(event);
+      if (!acceleratedVideo) seekForward(holdCandidateVideo);
+    }
     isRightArrowHeld = false;
     endAcceleration();
+  }
+
+  /** 阻止 YouTube 对已接管的右方向键执行跳秒，其他站点继续使用原生按键。 */
+  function consumeKey(event) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }
+
+  /** YouTube 短按松开时快进五秒；直播只在可回看的时间范围内跳转。 */
+  function seekForward(video) {
+    if (!video?.isConnected) return;
+    const end = Number.isFinite(video.duration)
+      ? video.duration
+      : video.seekable.length ? video.seekable.end(video.seekable.length - 1) : NaN;
+    if (Number.isFinite(end)) video.currentTime = Math.min(video.currentTime + 5, end);
   }
 
   function cancelHold() {
@@ -121,33 +152,7 @@
     endAcceleration();
   }
 
-  function showToast(message) {
-    const oldToast = document.getElementById('bilibili-hold-speed-toast');
-    if (oldToast) oldToast.remove();
-
-    const toast = document.createElement('div');
-    toast.id = 'bilibili-hold-speed-toast';
-    toast.textContent = message;
-    Object.assign(toast.style, {
-      position: 'fixed',
-      left: '50%',
-      top: '18%',
-      zIndex: '2147483647',
-      transform: 'translateX(-50%)',
-      padding: '10px 16px',
-      borderRadius: '7px',
-      color: '#fff',
-      background: 'rgba(0, 0, 0, 0.76)',
-      font: '14px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-      pointerEvents: 'none',
-      boxShadow: '0 2px 10px rgba(0, 0, 0, 0.2)'
-    });
-    (document.body || document.documentElement).appendChild(toast);
-    clearTimeout(toastTimer);
-    toastTimer = window.setTimeout(() => toast.remove(), 1500);
-  }
-
-  // 只观察按键，不阻止事件传播；短按和松开仍完整交给 B站播放器处理。
+  // B站和抖音只观察按键；YouTube 接管右方向键以区分短按快进和长按倍速。
   window.addEventListener('keydown', onKeyDown, true);
   window.addEventListener('keyup', onKeyUp, true);
   window.addEventListener('blur', cancelHold, true);
