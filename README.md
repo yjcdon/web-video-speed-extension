@@ -6,7 +6,7 @@
 
 长按阈值统一为 **0.5 秒**，倍率可在 **0.25×～16×** 之间调整，默认 **3×**。使用 Manifest V3，无需构建或安装依赖。
 
-[下载 v1.3.1 安装包](https://github.com/yjcdon/web-video-speed-extension/releases/download/v1.3.1/web-video-speed-extension-v1.3.1.zip) · [查看发布说明](https://github.com/yjcdon/web-video-speed-extension/releases/latest)
+[下载 v1.3.2 安装包](https://github.com/yjcdon/web-video-speed-extension/releases/download/v1.3.2/web-video-speed-extension-v1.3.2.zip) · [查看发布说明](https://github.com/yjcdon/web-video-speed-extension/releases/latest)
 
 ## 安装
 
@@ -52,7 +52,7 @@
 - `manifest.json`：扩展信息、权限和生效页面。
 - `content.js`：长按识别、临时倍率与速度恢复。
 - `popup.html`、`popup.css`、`popup.js`：倍率设置面板。
-- `icons/`：扩展图标。
+- `icons/`：扩展图标。设置面板和浏览器使用 PNG，SVG 保留为设计源文件。
 
 ## 开发检查
 
